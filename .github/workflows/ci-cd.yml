@@ -69,22 +69,13 @@ jobs:
           kubectl get nodes
           kubectl get deployments
 
-      - name: Apply Kubernetes manifests
+         - name: Install Ansible
         run: |
-          kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
+          sudo apt-get update
+          sudo apt-get install -y ansible
 
-      - name: Update deployment image
+      - name: Deploy application using Ansible
         run: |
-          kubectl set image deployment/simple-java-app \
-            app=docker.io/harineem/cloud-cicd-app:${GITHUB_SHA}
-
-      - name: Wait for deployment rollout
-        run: |
-          kubectl rollout status deployment/simple-java-app --timeout=300s
-
-      - name: Verify deployment
-        run: |
-          kubectl get deployments
-          kubectl get pods
-          kubectl get services
+          ansible-playbook \
+            -i ansible/inventory.ini \
+            ansible/deploy.yml

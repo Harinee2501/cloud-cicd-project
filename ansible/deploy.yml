@@ -1,0 +1,68 @@
+---
+- name: Deploy Java application to Google Kubernetes Engine
+  hosts: local
+  connection: local
+  gather_facts: false
+
+  vars:
+    image_name: "docker.io/harineem/cloud-cicd-app"
+    image_tag: "{{ lookup('env', 'GITHUB_SHA') }}"
+
+  tasks:
+    - name: Apply Kubernetes deployment manifest
+      ansible.builtin.command:
+        cmd: kubectl apply -f k8s/deployment.yaml
+      register: deployment_apply
+
+    - name: Display deployment manifest result
+      ansible.builtin.debug:
+        var: deployment_apply.stdout
+
+    - name: Apply Kubernetes service manifest
+      ansible.builtin.command:
+        cmd: kubectl apply -f k8s/service.yaml
+      register: service_apply
+
+    - name: Display service manifest result
+      ansible.builtin.debug:
+        var: service_apply.stdout
+
+    - name: Update deployment to the new Docker image
+      ansible.builtin.command:
+        cmd: >-
+          kubectl set image deployment/simple-java-app
+          app={{ image_name }}:{{ image_tag }}
+
+    - name: Wait for deployment rollout
+      ansible.builtin.command:
+        cmd: kubectl rollout status deployment/simple-java-app --timeout=300s
+
+    - name: Verify Kubernetes deployment
+      ansible.builtin.command:
+        cmd: kubectl get deployments
+      register: deployment_status
+      changed_when: false
+
+    - name: Display deployment status
+      ansible.builtin.debug:
+        var: deployment_status.stdout
+
+    - name: Verify Kubernetes pods
+      ansible.builtin.command:
+        cmd: kubectl get pods
+      register: pod_status
+      changed_when: false
+
+    - name: Display pod status
+      ansible.builtin.debug:
+        var: pod_status.stdout
+
+    - name: Verify Kubernetes service
+      ansible.builtin.command:
+        cmd: kubectl get services
+      register: service_status
+      changed_when: false
+
+    - name: Display service status
+      ansible.builtin.debug:
+        var: service_status.stdout
