@@ -67,6 +67,11 @@ jobs:
         run: |
           echo "USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> "$GITHUB_ENV"
 
+      - name: Verify Google Cloud authentication
+        run: |
+          gcloud auth list
+          gcloud config get-value project
+
       - name: Get GKE credentials
         run: |
           gcloud container clusters get-credentials "$GKE_CLUSTER" \

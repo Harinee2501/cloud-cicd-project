@@ -5,5 +5,7 @@ target/
 .env
 *.key
 github-cicd-key.json
+github-cicd-key-compact.json
+gha-creds-*.json
 cluster-ca-base64.txt
 cluster-ca.crt
