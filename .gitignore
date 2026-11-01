@@ -4,3 +4,6 @@ target/
 *.class
 .env
 *.key
+github-cicd-key.json
+cluster-ca-base64.txt
+cluster-ca.crt
