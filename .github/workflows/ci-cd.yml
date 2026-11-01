@@ -61,6 +61,11 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ env.PROJECT_ID }}
+          install_components: gke-gcloud-auth-plugin
+
+      - name: Configure GKE authentication plugin
+        run: |
+          echo "USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> "$GITHUB_ENV"
 
       - name: Get GKE credentials
         run: |
@@ -68,13 +73,10 @@ jobs:
             --region "$GKE_REGION" \
             --project "$PROJECT_ID"
 
-      - name: Install GKE authentication plugin
+      - name: Verify GKE access
         run: |
-          gcloud components install gke-gcloud-auth-plugin --quiet
-
-      - name: Configure kubectl authentication
-        run: |
-          echo "USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> "$GITHUB_ENV"
+          kubectl get nodes
+          kubectl get deployments
 
       - name: Apply Kubernetes manifests
         run: |
