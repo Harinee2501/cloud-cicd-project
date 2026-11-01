@@ -5,13 +5,14 @@
   gather_facts: false
 
   vars:
+    project_root: "{{ playbook_dir }}/.."
     image_name: "docker.io/harineem/cloud-cicd-app"
     image_tag: "{{ lookup('env', 'GITHUB_SHA') }}"
 
   tasks:
     - name: Apply Kubernetes deployment manifest
       ansible.builtin.command:
-        cmd: kubectl apply -f k8s/deployment.yaml
+        cmd: kubectl apply -f "{{ project_root }}/k8s/deployment.yaml"
       register: deployment_apply
 
     - name: Display deployment manifest result
@@ -20,7 +21,7 @@
 
     - name: Apply Kubernetes service manifest
       ansible.builtin.command:
-        cmd: kubectl apply -f k8s/service.yaml
+        cmd: kubectl apply -f "{{ project_root }}/k8s/service.yaml"
       register: service_apply
 
     - name: Display service manifest result
