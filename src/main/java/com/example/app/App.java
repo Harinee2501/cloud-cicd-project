@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 public class App {
 
     public static String getMessage() {
-        return "Hello from my Cloud CI/CD Pipeline!";
+        return "Hello. Version 2.";
     }
 
     public static void main(String[] args) throws IOException {
