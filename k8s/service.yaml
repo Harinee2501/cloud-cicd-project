@@ -4,7 +4,6 @@ metadata:
   name: simple-java-service
 spec:
   type: LoadBalancer
-  loadBalancerClass: networking.gke.io/l4-regional-external
   selector:
     app: simple-java-app
   ports:

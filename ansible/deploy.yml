@@ -1,5 +1,6 @@
+
 ---
-- name: Deploy Java application to Google Kubernetes Engine
+- name: Deploy Java application to Azure Kubernetes Service
   hosts: local
   connection: local
   gather_facts: false
@@ -50,7 +51,7 @@
 
     - name: Verify Kubernetes pods
       ansible.builtin.command:
-        cmd: kubectl get pods
+        cmd: kubectl get pods -o wide
       register: pod_status
       changed_when: false
 
