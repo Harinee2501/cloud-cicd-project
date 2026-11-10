@@ -14,6 +14,7 @@
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.11.4</junit.version>
+        <sonar.organization>harinee2501</sonar.organization>
     </properties>
 
     <dependencies>
